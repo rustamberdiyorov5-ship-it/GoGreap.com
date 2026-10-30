@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CLAUDE.BEK</title>
+<style>
+:root{color-scheme:dark;--bg:#05030f;--glass:rgba(255,255,255,.07);--line:rgba(255,255,255,.14);--tx:#f1eeff;--mut:#a79fd0;--a:#8b5cf6;--b:#22d3ee;--c:#f472b6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow:hidden}
+canvas#st{position:fixed;inset:0;z-index:0}
+.aur{position:fixed;inset:-20%;z-index:0;background:radial-gradient(40% 40% at 20% 30%,rgba(139,92,246,.45),transparent),radial-gradient(35% 35% at 80% 20%,rgba(34,211,238,.35),transparent),radial-gradient(40% 40% at 60% 85%,rgba(244,114,182,.35),transparent);filter:blur(40px);animation:aur 18s ease-in-out infinite alternate}
+@keyframes aur{to{transform:translate(6%,-5%) rotate(8deg) scale(1.15)}}
+#app{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;max-width:900px;margin:auto}
+header{display:flex;align-items:center;gap:8px;padding:12px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--glass);color:var(--tx);padding:10px 14px;border-radius:14px;font-size:14px;cursor:pointer;backdrop-filter:blur(14px);transition:.25s}
+.btn:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 0 22px rgba(139,92,246,.6)}
+.new{background:linear-gradient(135deg,var(--a),var(--b));border:0;font-weight:700;animation:pulse 2.4s infinite}
+@keyframes pulse{50%{box-shadow:0 0 26px rgba(34,211,238,.7)}}
+.logo{margin-left:auto;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,var(--b),var(--a),var(--c),var(--b));background-size:300%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 5s linear infinite}
+@keyframes flow{to{background-position:300%}}
+.badge{font-size:12px;color:var(--mut)}
+#msgs{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:12px}
+.m{max-width:86%;padding:12px 15px;border-radius:18px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;animation:pop .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.9)}}
+.u{align-self:flex-end;background:linear-gradient(135deg,var(--a),#6d28d9)}
+.a{align-self:flex-start;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px)}
+.hero{margin:auto;text-align:center;animation:pop .8s}
+.hero h1{font-size:clamp(34px,9vw,64px);font-weight:900;background:linear-gradient(90deg,var(--b),var(--a),var(--c),var(--b));background-size:300%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 5s linear infinite,flt 4s ease-in-out infinite}
+@keyframes flt{50%{transform:translateY(-10px)}}
+.hero p{color:var(--mut);margin-top:8px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.dots span{display:inline-block;width:7px;height:7px;margin:0 2px;border-radius:50%;background:var(--b);animation:dt 1s infinite}
+.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+@keyframes dt{50%{transform:translateY(-6px);opacity:.4}}
+form,.bar{display:flex;gap:8px;padding:12px}
+input,textarea{flex:1;min-width:0;background:var(--glass);border:1px solid var(--line);color:var(--tx);padding:13px 15px;border-radius:16px;font-size:15px;outline:none;backdrop-filter:blur(14px)}
+input:focus{border-color:var(--b);box-shadow:0 0 20px rgba(34,211,238,.35)}
+.on{background:linear-gradient(135deg,var(--c),var(--a))!important;border:0}
+.gen{width:100%;max-width:100%}
+.pct{font-size:42px;font-weight:900;background:linear-gradient(90deg,var(--b),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
+.tr{height:8px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden;margin:5px 0 9px}
+.tr i{display:block;height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,var(--a),var(--b),var(--c));background-size:200%;animation:flow 2s linear infinite}
+.ag{font-size:13px;display:flex;justify-content:space-between}
+.log{font:12px ui-monospace,monospace;color:var(--b);max-height:90px;overflow:auto;margin-top:6px}
+iframe{width:100%;height:320px;border:1px solid var(--line);border-radius:14px;background:#fff;margin-top:8px}
+.ov{position:fixed;inset:0;z-index:20;background:rgba(3,2,10,.75);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:14px;overflow:auto}
+.ov.s{display:flex}
+.box{background:rgba(20,14,48,.95);border:1px solid var(--line);border-radius:22px;padding:18px;width:100%;max-width:560px;animation:pop .5s}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+.pl{border:1px solid var(--line);border-radius:18px;padding:14px;cursor:pointer;transition:.3s;background:var(--glass)}
+.pl:hover,.pl.sel{transform:translateY(-4px);border-color:var(--b);box-shadow:0 0 28px rgba(139,92,246,.6)}
+.pr{font-size:28px;font-weight:900}
+.old{text-decoration:line-through;color:var(--mut);font-size:15px}
+.pl small{display:block;color:var(--mut);margin-top:6px}
+.tm{color:var(--c);font-weight:700;font-variant-numeric:tabular-nums}
+#hist{position:fixed;left:0;top:0;bottom:0;width:270px;z-index:15;background:rgba(14,9,36,.96);border-right:1px solid var(--line);padding:14px;transform:translateX(-105%);transition:.4s;overflow:auto}
+#hist.s{transform:none}
+#hist .btn{width:100%;margin-bottom:8px;text-align:left}
+</style>
+</head>
+<body>
+<canvas id="st"></canvas><div class="aur"></div>
+<div id="hist"></div>
+<div id="app">
+<header>
+<button class="btn new" id="nw">＋ Yangi chat</button>
+<button class="btn" id="hb">☰</button>
+<span class="badge" id="bd"></span>
+<span class="logo">CLAUDE.BEK</span>
+<button class="btn" id="pb">👑 Pro / King</button>
+</header>
+<div id="msgs"></div>
+<div class="bar"><button class="btn" id="gm">🌐 Sayt yaratish</button><span class="badge" id="md" style="align-self:center"></span></div>
+<form id="f"><input id="in" placeholder="Savol yozing, doʻstim…" autocomplete="off"><button class="btn new" type="submit">➤</button></form>
+</div>
+<div class="ov" id="ov"><div class="box">
+<h2>👑 Tarif tanlang</h2>
+<p class="badge">Aksiya tugashiga: <span class="tm" id="tm"></span></p>
+<div class="plans" id="pls"></div>
+<input id="nm" placeholder="Ismingiz" style="width:100%;margin-bottom:8px">
+<input id="em" placeholder="Email" style="width:100%;margin-bottom:10px">
+<div style="display:flex;gap:8px"><button class="btn new" id="pay" style="flex:1">Toʻlash (demo)</button><button class="btn" id="cl">Yopish</button></div>
+<p class="badge" style="margin-top:10px" id="db"></p>
+</div></div>
+<script>
+const $=s=>document.querySelector(s);
+let S={chats:[],cur:null,plan:"free",day:"",used:0,promo:0,pay:[]};
+try{Object.assign(S,JSON.parse(localStorage.getItem("cb")||"{}"))}catch(e){}
+const save=()=>{try{localStorage.setItem("cb",JSON.stringify(S))}catch(e){}};
+if(!S.promo){S.promo=Date.now()}
+const LIM={free:3,pro:10,king:30},NAME={free:"Free",pro:"Pro",king:"King"};
+const today=()=>new Date().toISOString().slice(0,10);
+if(S.day!==today()){S.day=today();S.used=0}
+const promoLeft=()=>S.promo+43200000-Date.now();
+const proPrice=()=>promoLeft()>0?5.55:9.99;
+let mode=false,busy=false,sel="pro";
+function chat(){let c=S.chats.find(x=>x.id===S.cur);if(!c){c={id:Date.now(),title:"Yangi chat",msgs:[]};S.chats.unshift(c);S.cur=c.id;save()}return c}
+function badge(){$("#bd").textContent=NAME[S.plan]+" · "+S.used+"/"+LIM[S.plan]+" sayt";$("#md").textContent=mode?"Sayt gʻoyasini yozing 👇":""}
+function scroll(){const m=$("#msgs");m.scrollTop=m.scrollHeight}
+function add(r,t){const d=document.createElement("div");d.className="m "+(r==="u"?"u":"a");d.textContent=t;$("#msgs").appendChild(d);scroll();return d}
+function render(){const m=$("#msgs");m.innerHTML="";const c=chat();
+if(!c.msgs.length){m.innerHTML='<div class="hero"><h1>CLAUDE.BEK</h1><p>Salom, doʻstim! Men sizning AI doʻstingizman 🚀</p><div class="chips"></div></div>';
+["Salom!","Sayt yarata olasanmi?","Tariflar qanday?"].forEach(t=>{const b=document.createElement("button");b.className="btn";b.textContent=t;b.onclick=()=>send(t);m.querySelector(".chips").appendChild(b)})}
+c.msgs.forEach(x=>add(x.r,x.t));badge()}
+function reply(q){const s=q.toLowerCase();
+if(/salom|assalom|hi|hello|qalay/.test(s))return"Assalomu alaykum, doʻstim! 😊 Qalaysiz? Men CLAUDE.BEK — savol bering yoki sayt yaratamiz!";
+if(/sayt|site|web/.test(s))return"Albatta, doʻstim! 🌐 Pastdagi «Sayt yaratish» tugmasini bosing, gʻoyangizni yozing — agentlarim 3–4 daqiqada sayt yasab beradi. Free: kuniga 3 ta, Pro: 10 ta, King: 30 ta.";
+if(/narx|tarif|pro|king|pul|sotib/.test(s))return"Tariflar 👑\n• Pro — $"+proPrice().toFixed(2)+(promoLeft()>0?" (aksiya! keyin $9.99)":"")+"\n• King — $11.11\nYuqoridagi «Pro / King» tugmasini bosing.";
+if(/isming|kimsan|kim/.test(s))return"Men CLAUDE.BEK — sizning doʻstona AI yordamchingizman 🤖✨";
+if(/rahmat|raxmat|thanks/.test(s))return"Arzimaydi, doʻstim! Doim yoningizdaman 💜";
+if(/\d\s*[\+\-\*\/x]\s*\d/.test(s)){try{const e=s.replace(/x/g,"*").match(/[\d\.\s\+\-\*\/\(\)]+/)[0];const r=Function('"use strict";return('+e+')')();return"Javob: "+r+" 🧮"}catch(e){}}
+if(/vaqt|soat/.test(s))return"Hozir: "+new Date().toLocaleTimeString("uz")+" ⏰";
+return"Yaxshi savol, doʻstim! 🤔 Bu haqda birga oʻylab koʻramiz: "+q.slice(0,80)+"… Batafsilroq yozsangiz, aniqroq yordam beraman. Xohlasangiz, shu gʻoyadan sayt ham yasab beraman! 🌐"}
+async function send(t){t=t.trim();if(!t||busy)return;const c=chat();c.msgs.push({r:"u",t});if(c.title==="Yangi chat")c.title=t.slice(0,24);
+add("u",t);$("#in").value="";
+if(mode){mode=false;badge();save();return gen(t)}
+const d=add("a","");d.innerHTML='<span class="dots"><span></span><span></span><span></span></span>';
+await new Promise(r=>setTimeout(r,700));const a=reply(t);d.textContent="";
+for(let i=0;i<=a.length;i+=2){d.textContent=a.slice(0,i);scroll();await new Promise(r=>setTimeout(r,14))}
+d.textContent=a;c.msgs.push({r:"a",t:a});save()}
+const AG=[["🎨 Dizayner","Rang va maket tanlanmoqda"],["💻 Dasturchi","HTML/CSS yozilmoqda"],["✨ Animator","Animatsiyalar qoʻshilmoqda"],["🧪 Tester","Xatolar tekshirilmoqda"]];
+const STEPS=["Gʻoya tahlil qilinmoqda","Struktura tuzilmoqda","Rang palitrasi tanlandi","Hero boʻlim yozilmoqda","Kartalar yaratilmoqda","Animatsiyalar ulanmoqda","Mobil moslashuv","Xatolar qidirilmoqda","Yakuniy sayqal","Tayyor!"];
+function site(topic){const T=topic.replace(/[<>&"]/g,"");return`<!DOCTYPE html><html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${T}</title><style>*{margin:0;box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#0b0820;color:#fff}.h{min-height:70vh;display:grid;place-items:center;text-align:center;padding:30px;background:linear-gradient(120deg,#6d28d9,#0ea5e9,#ec4899,#6d28d9);background-size:300%;animation:g 8s linear infinite}@keyframes g{to{background-position:300%}}h1{font-size:clamp(30px,8vw,64px);animation:u 1s}@keyframes u{from{opacity:0;transform:translateY(30px)}}.h a{display:inline-block;margin-top:18px;padding:14px 26px;background:#fff;color:#6d28d9;border-radius:30px;font-weight:700;text-decoration:none}.c{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;padding:30px}.c div{padding:22px;border-radius:18px;background:rgba(255,255,255,.08);transition:.3s}.c div:hover{transform:translateY(-8px) rotate(-1deg)}footer{text-align:center;padding:20px;opacity:.6}</style></head><body><div class="h"><div><h1>${T}</h1><p>CLAUDE.BEK tomonidan yaratildi ✨</p><a href="#x">Boshlash</a></div></div><div class="c" id="x"><div>🚀 Tez<br>Bir zumda ishlaydi</div><div>🎨 Chiroyli<br>Zamonaviy dizayn</div><div>📱 Moslashuvchan<br>Har qanday ekranda</div></div><footer>© ${T}</footer></body></html>`}
+function gen(topic){
+if(S.used>=LIM[S.plan]){add("a","Bugungi limit tugadi, doʻstim 😅 ("+LIM[S.plan]+" ta). Pro yoki King tarifi bilan koʻproq sayt yasang! 👑");return}
+busy=true;S.used++;save();badge();
+const D=180000+Math.random()*60000,t0=Date.now();
+const card=add("a","");card.classList.add("gen");card.style.width="100%";
+card.innerHTML='<b>🤖 Agentlar ishga tushdi: '+topic.replace(/</g,"")+'</b><div class="pct">0%</div>'+AG.map(a=>'<div class="ag"><span>'+a[0]+'</span><span class="t"></span></div><div class="tr"><i></i></div>').join("")+'<div class="log"></div>';
+const bars=card.querySelectorAll(".tr i"),ts=card.querySelectorAll(".t"),lg=card.querySelector(".log");let ls=0;
+const iv=setInterval(()=>{const p=Math.min(1,(Date.now()-t0)/D);
+card.querySelector(".pct").textContent=Math.floor(p*100)+"%";
+AG.forEach((a,i)=>{const v=Math.max(0,Math.min(1,p*4-i));bars[i].style.width=v*100+"%";ts[i].textContent=v>=1?"✅ tayyor":v>0?a[1]:"kutmoqda"});
+while(ls<STEPS.length&&p>=ls/STEPS.length){lg.innerHTML+="› "+STEPS[ls]+"<br>";lg.scrollTop=1e5;ls++}
+scroll();
+if(p>=1){clearInterval(iv);busy=false;const h=site(topic),u=URL.createObjectURL(new Blob([h],{type:"text/html"}));
+card.innerHTML='<b>✅ Saytingiz tayyor, doʻstim! 🎉</b><iframe sandbox="allow-scripts"></iframe><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><a class="btn new" href="'+u+'" download="sayt.html" style="text-decoration:none">⬇ Yuklab olish</a></div>';
+card.querySelector("iframe").srcdoc=h;chat().msgs.push({r:"a",t:"✅ Sayt yaratildi: "+topic});save();scroll()}},250)}
+function plans(){const pp=proPrice(),pr=promoLeft()>0;
+$("#pls").innerHTML=[["pro","Pro",pp,"Kuniga 10 ta sayt, tezroq javob",pr?9.99:0],["king","King",11.11,"Kuniga 30 ta sayt, eng kuchli agentlar",0]].map(p=>'<div class="pl '+(sel===p[0]?"sel":"")+'" data-p="'+p[0]+'"><b>'+p[1]+'</b><div class="pr">$'+p[2].toFixed(2)+'</div>'+(p[4]?'<div class="old">$'+p[4]+'</div>':'')+'<small>'+p[3]+'</small></div>').join("");
+document.querySelectorAll(".pl").forEach(e=>e.onclick=()=>{sel=e.dataset.p;plans()});
+$("#db").textContent="Baza: "+S.pay.length+" ta toʻlov saqlangan · Joriy tarif: "+NAME[S.plan]}
+setInterval(()=>{const l=promoLeft();$("#tm").textContent=l>0?[l/3600000,l/60000%60,l/1000%60].map(x=>String(Math.floor(x)).padStart(2,"0")).join(":"):"tugadi — Pro $9.99";if($("#ov").classList.contains("s"))plans()},1000);
+$("#pb").onclick=()=>{plans();$("#ov").classList.add("s")};
+$("#cl").onclick=()=>$("#ov").classList.remove("s");
+$("#pay").onclick=()=>{const n=$("#nm").value.trim(),e=$("#em").value.trim();if(!n||!/\S+@\S+/.test(e)){$("#db").textContent="Ism va toʻgʻri email kiriting";return}
+const price=sel==="pro"?proPrice():11.11;S.pay.push({plan:sel,price,name:n,email:e,t:new Date().toISOString()});S.plan=sel;save();badge();plans();
+$("#db").textContent="🎉 "+NAME[sel]+" faollashdi! $"+price.toFixed(2)+" bazaga yozildi (demo, haqiqiy pul yechilmaydi)"};
+$("#nw").onclick=()=>{if(busy)return;S.cur=null;mode=false;render();$("#hist").classList.remove("s")};
+$("#hb").onclick=()=>{const h=$("#hist");h.innerHTML="";S.chats.forEach(c=>{const b=document.createElement("button");b.className="btn";b.textContent="💬 "+c.title;b.onclick=()=>{S.cur=c.id;render();h.classList.remove("s")};h.appendChild(b)});h.classList.toggle("s")};
+$("#gm").onclick=()=>{mode=!mode;$("#gm").classList.toggle("on",mode);badge();$("#in").focus()};
+$("#f").onsubmit=e=>{e.preventDefault();$("#gm").classList.remove("on");send($("#in").value)};
+(function(){const c=$("#st"),x=c.getContext("2d");let W,H,P=[];function rs(){W=c.width=innerWidth;H=c.height=innerHeight;P=Array.from({length:Math.min(140,W/8)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.8+.3,v:Math.random()*.4+.1,p:Math.random()*6}))}rs();addEventListener("resize",rs);
+(function f(t){x.clearRect(0,0,W,H);P.forEach(s=>{s.y+=s.v;if(s.y>H){s.y=0;s.x=Math.random()*W}x.globalAlpha=.4+.6*Math.abs(Math.sin(t/700+s.p));x.fillStyle="#cfe9ff";x.beginPath();x.arc(s.x,s.y,s.r,0,7);x.fill()});requestAnimationFrame(f)})(0)})();
+render();
+</script>
+</body>
+</html>
